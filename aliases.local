@@ -1,0 +1,39 @@
+_puppet_update() {
+    cd /etc/puppet
+    echo "Pulling repo..."
+    git pull
+    echo "Updating submodules..."
+    git submodule update --init --recursive
+}
+
+_puppet_fix() {
+    echo "Setting chown root:adm..."
+    sudo chown -R root:adm /etc/puppet
+    echo "Setting chmod g+w..."
+    sudo chmod -R g+w /etc/puppet
+}
+
+_puppet_apply() {
+    local -a params
+    local manifest="/etc/puppet/manifests/site.pp"
+    for param in "$@"; do
+        if [ -f "$param" ] && [[ "$param" =~ .pp$ ]]; then
+            manifest="$param"
+        else
+            params+=("$param")
+        fi
+    done
+    sudo puppet apply "$manifest" ${params[@]}
+}
+
+_godep_install_fix() {
+    echo "Setting chown root:dev..."
+    sudo chown -R root:dev /srv/datadisk/golang/pkg
+}
+
+alias "puppet-apply"="_puppet_apply"
+alias "puppet-noop"="_puppet_apply --noop"
+alias "puppet-noop-diff"="puppet-noop --show_diff"
+alias "puppet-update"="_puppet_update"
+alias "puppet-fix"="_puppet_fix"
+alias "godep-install-fix"="_godep_install_fix"
