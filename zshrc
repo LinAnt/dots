@@ -85,4 +85,4 @@ export RMATE_PORT=52702
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 test -f "$HOME/.z.sh" && . "$HOME/.z.sh"
-test -f "$HOME/.aliases.local" && . "$HOME/.aliases.local"
+test -f "$HOME/.zshrc.local" && . "$HOME/.zshrc.local"
